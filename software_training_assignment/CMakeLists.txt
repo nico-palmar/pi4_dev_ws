@@ -16,12 +16,29 @@ find_package(rclcpp REQUIRED)
 find_package(turtlesim REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
 find_package(rcutils REQUIRED)
 find_package(rcl REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+
+# setup interfaces
+# set(srv_files
+# 	""
+# )
+
+# set (msg_files
+# 	""
+# )
+
+# rosidl_generate_interfaces(${PROJECT_NAME}
+# 	${srv_files}
+# 	${msg_files}
+# )
+
+# ament_export_dependencies(rosidl_default_runtime)
 
 #include the 'include' directory
 include_directories(include)
@@ -35,14 +52,16 @@ set(node_plugins "")
 add_library(clear_request SHARED 
 	src/clear_turtles.cpp)
 target_compile_definitions(clear_request
-	PRIVATE "COMPOSITION_BUILDING_DLL")
+	PRIVATE "SOFTWARE_TRAINING_DLL")
 ament_target_dependencies(clear_request
 	"rclcpp"
 	"rclcpp_components"
 	"turtlesim"
-	"std_msgs")
+	"std_srvs")
+# another way of registering and setting the node as a component below
+# rclcpp_components_register_nodes(clear_request PLUGIN "composition::clear_turtles" EXECUTABLE request_clear)
 rclcpp_components_register_nodes(clear_request "composition::clear_turtles")
-# this way we can execute the component with - ros2 component standalone software_training composition::turtle_service_request_node
+# this way we can execute the component with - ros2 component standalone software_training_assignment composition::clear_turtles
 set(node_plugins "${node_plugins}compositon::clear_turtles;$<TARGET_FILE:clear_request>\n")
 
 #tell where to put binaries
