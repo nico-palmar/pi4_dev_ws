@@ -48,7 +48,7 @@ set(node_plugins "")
 
 #add plugins as SHARED library 
 
-#add turtle_request_service_node as a plugin
+#add clear_turtle_node as a plugin
 add_library(clear_request SHARED 
 	src/clear_turtles.cpp)
 target_compile_definitions(clear_request
@@ -64,9 +64,26 @@ rclcpp_components_register_nodes(clear_request "composition::clear_turtles")
 # this way we can execute the component with - ros2 component standalone software_training_assignment composition::clear_turtles
 set(node_plugins "${node_plugins}compositon::clear_turtles;$<TARGET_FILE:clear_request>\n")
 
+#add clear_turtle_node as a plugin
+add_library(spawn_turtles SHARED 
+	src/spawn_turtles.cpp)
+target_compile_definitions(spawn_turtles
+	PRIVATE "SOFTWARE_TRAINING_DLL")
+ament_target_dependencies(spawn_turtles
+	"rclcpp"
+	"rclcpp_components"
+	"turtlesim"
+	"std_srvs")
+# another way of registering and setting the node as a component below
+# rclcpp_components_register_nodes(clear_request PLUGIN "composition::clear_turtles" EXECUTABLE request_clear)
+rclcpp_components_register_nodes(spawn_turtles "composition::SpawnTwoTurtles")
+# this way we can execute the component with - ros2 component standalone software_training_assignment composition::SpawnTwoTurtles
+set(node_plugins "${node_plugins}compositon::SpawnTwoTurtles;$<TARGET_FILE:spawn_turtles>\n")
+
 #tell where to put binaries
 install(TARGETS
 	clear_request
+	spawn_turtles
 	ARCHIVE DESTINATION lib
 	LIBRARY DESTINATION lib 
 	RUNTIME DESTINATION bin)

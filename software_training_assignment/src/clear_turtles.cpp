@@ -35,7 +35,7 @@ private:
   rclcpp::Service<turtlesim::srv::Kill>::SharedPtr add_name_server;
 
   // clear the initial turtle which is launched with the turtle node
-  std::vector<std::string> turtle_names = {"turtle1"};
+  std::vector<std::string> turtle_names = {"turtle1", "moving_turtle", "stationary_turtle"};
   // , "moving_turtle", "stationary_turtle"};
 
   SOFTWARE_TRAINING_LOCAL
@@ -74,8 +74,8 @@ private:
         // auto res = client->async_send_request(kill_req, std::bind(&clear_turtles::kill_callback, this, _1));
         auto res = client->async_send_request(kill_req);
     }
-    // remove all turtles after clearing them to update the known turtles
-    turtle_names.clear();
+    // too much work, just leave it - remove all turtles after clearing them to update the known turtles
+    // turtle_names.clear();
     resp->success = true;
     
   }
