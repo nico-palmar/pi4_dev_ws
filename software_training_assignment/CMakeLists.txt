@@ -64,7 +64,6 @@ rclcpp_components_register_nodes(clear_request "composition::clear_turtles")
 # this way we can execute the component with - ros2 component standalone software_training_assignment composition::clear_turtles
 set(node_plugins "${node_plugins}compositon::clear_turtles;$<TARGET_FILE:clear_request>\n")
 
-#add clear_turtle_node as a plugin
 add_library(spawn_turtles SHARED 
 	src/spawn_turtles.cpp)
 target_compile_definitions(spawn_turtles
@@ -80,10 +79,29 @@ rclcpp_components_register_nodes(spawn_turtles "composition::SpawnTwoTurtles")
 # this way we can execute the component with - ros2 component standalone software_training_assignment composition::SpawnTwoTurtles
 set(node_plugins "${node_plugins}compositon::SpawnTwoTurtles;$<TARGET_FILE:spawn_turtles>\n")
 
+
+add_library(move_circular SHARED 
+	src/move_circular.cpp)
+target_compile_definitions(move_circular
+	PRIVATE "SOFTWARE_TRAINING_DLL")
+ament_target_dependencies(move_circular
+	"rclcpp"
+	"rclcpp_components"
+	"turtlesim"
+	"std_srvs"
+	"geometry_msgs"
+	"std_msgs")
+# another way of registering and setting the node as a component below
+# rclcpp_components_register_nodes(clear_request PLUGIN "composition::clear_turtles" EXECUTABLE request_clear)
+rclcpp_components_register_nodes(move_circular "composition::CircularMotion")
+# this way we can execute the component with - ros2 component standalone software_training_assignment composition::SpawnTwoTurtles
+set(node_plugins "${node_plugins}compositon::CircularMotion;$<TARGET_FILE:move_circular>\n")
+
 #tell where to put binaries
 install(TARGETS
 	clear_request
 	spawn_turtles
+	move_circular
 	ARCHIVE DESTINATION lib
 	LIBRARY DESTINATION lib 
 	RUNTIME DESTINATION bin)
