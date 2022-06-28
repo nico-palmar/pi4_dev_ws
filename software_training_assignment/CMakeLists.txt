@@ -97,11 +97,27 @@ rclcpp_components_register_nodes(move_circular "composition::CircularMotion")
 # this way we can execute the component with - ros2 component standalone software_training_assignment composition::SpawnTwoTurtles
 set(node_plugins "${node_plugins}compositon::CircularMotion;$<TARGET_FILE:move_circular>\n")
 
+add_library(reset_moving SHARED 
+	src/reset_moving_turtle.cpp)
+target_compile_definitions(reset_moving
+	PRIVATE "SOFTWARE_TRAINING_DLL")
+ament_target_dependencies(reset_moving
+	"rclcpp"
+	"rclcpp_components"
+	"turtlesim"
+	"std_srvs")
+# another way of registering and setting the node as a component below
+# rclcpp_components_register_nodes(clear_request PLUGIN "composition::clear_turtles" EXECUTABLE request_clear)
+rclcpp_components_register_nodes(reset_moving "composition::MotionReset")
+# this way we can execute the component with - ros2 component standalone software_training_assignment composition::SpawnTwoTurtles
+set(node_plugins "${node_plugins}compositon::MotionReset;$<TARGET_FILE:reset_moving>\n")
+
 #tell where to put binaries
 install(TARGETS
 	clear_request
 	spawn_turtles
 	move_circular
+	reset_moving
 	ARCHIVE DESTINATION lib
 	LIBRARY DESTINATION lib 
 	RUNTIME DESTINATION bin)
