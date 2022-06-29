@@ -31,11 +31,16 @@ namespace composition {
         rclcpp::Publisher<distance_msg>::SharedPtr distance_pub;
         rclcpp::TimerBase::SharedPtr pub_timer;
         rclcpp::Subscription<pose_msg>::SharedPtr moving_pos_sub;
+        bool read_move;
 
         SOFTWARE_TRAINING_LOCAL
         // timer call back to get current positions and compute distances
         void publish_distances();
+        // subscriber function to get data from topic
         void get_moving_position(const pose_msg::SharedPtr msg);
+
+        // helper function for computing euclidean distance
+        double compute_euc_dist(Position p2, Position p1);
 
     };
 }
