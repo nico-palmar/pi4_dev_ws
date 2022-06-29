@@ -9,6 +9,7 @@
 #include <software_training_assignment/visibility.h>
 #include <std_srvs/srv/trigger.hpp>
 #include <turtlesim/srv/spawn.hpp>
+#include <software_training_assignment/common.hpp>
 // #include <turtlesim/srv/kill.hpp>
 
 using namespace std::chrono_literals;
@@ -23,6 +24,9 @@ public:
         // TODO: make sure it is /spawn and not /Spawn
         spawn_client = create_client<turtlesim::srv::Spawn>("/spawn");
         // add_turtle_client = create_client<turtlesim::srv::Kill>("/add_turtle_name");
+        // define the starting positions order { x, y, theta }
+        Position init_moving_turtle_pos = { 25, 10, 0 };
+        Position stationary_turtle_pos = { 5, 5, 0 };
         two_turtle_server = create_service<std_srvs::srv::Trigger>("spawn_two_turtles", std::bind(&SpawnTwoTurtles::two_turtle_spawn, this, _1, _2));
     }
 
@@ -39,17 +43,17 @@ private:
             auto stationary_spawn_req = std::make_shared<turtlesim::srv::Spawn::Request>();
             stationary_spawn_req->name = "stationary_turtle";
             
-            stationary_spawn_req->x = 5.0;
-            stationary_spawn_req->y = 5.0;
-            stationary_spawn_req->theta = 0.0;
+            stationary_spawn_req->x = stationary_turtle_pos.x;
+            stationary_spawn_req->y = stationary_turtle_pos.y;
+            stationary_spawn_req->theta = stationary_turtle_pos.theta;
             auto stationary_spawn_res = spawn_client->async_send_request(stationary_spawn_req);
 
             auto moving_spawn_req = std::make_shared<turtlesim::srv::Spawn::Request>();
             moving_spawn_req->name = "moving_turtle";
             
-            moving_spawn_req->x = 25.0;
-            moving_spawn_req->y = 10.0;
-            moving_spawn_req->theta = 0.0;
+            moving_spawn_req->x = init_moving_turtle_pos.x;
+            moving_spawn_req->y = init_moving_turtle_pos.y;
+            moving_spawn_req->theta = init_moving_turtle_pos.theta;
             auto moving_spawn_res = spawn_client->async_send_request(moving_spawn_req);
 
             did_spawn = true;
