@@ -12,6 +12,11 @@
 #include <software_training_assignment/common.hpp>
 // #include <turtlesim/srv/kill.hpp>
 
+// define global variables here. MUST LOAD THIS COMPONENT FIRST
+Position init_moving_turtle_pos = { 25, 10, 0 };
+Position stationary_turtle_pos = { 5, 5, 0 };
+Position current_moving_turtle_pos { init_moving_turtle_pos };
+
 using namespace std::chrono_literals;
 using namespace std::placeholders;
 
@@ -25,8 +30,6 @@ public:
         spawn_client = create_client<turtlesim::srv::Spawn>("/spawn");
         // add_turtle_client = create_client<turtlesim::srv::Kill>("/add_turtle_name");
         // define the starting positions order { x, y, theta }
-        Position init_moving_turtle_pos = { 25, 10, 0 };
-        Position stationary_turtle_pos = { 5, 5, 0 };
         two_turtle_server = create_service<std_srvs::srv::Trigger>("spawn_two_turtles", std::bind(&SpawnTwoTurtles::two_turtle_spawn, this, _1, _2));
     }
 

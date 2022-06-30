@@ -33,7 +33,7 @@ namespace composition {
 
 
         SOFTWARE_TRAINING_LOCAL
-        void pos_reset(const std::shared_ptr<trigger_srv::Request> req, std::shared_ptr<trigger_srv::Response> resp) {
+        void pos_reset(const std::shared_ptr<trigger_srv::Request> /* req */, std::shared_ptr<trigger_srv::Response> resp) {
             if (!teleport_abs_client->wait_for_service(2s)) {
                 if(!rclcpp::ok()) {
                     RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for teleport_absolute service, exiting");
