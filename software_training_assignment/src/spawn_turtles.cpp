@@ -12,10 +12,6 @@
 #include <software_training_assignment/common.hpp>
 // #include <turtlesim/srv/kill.hpp>
 
-// define global variables here. MUST LOAD THIS COMPONENT FIRST
-Position init_moving_turtle_pos = { 25, 10, 0 };
-Position stationary_turtle_pos = { 5, 5, 0 };
-Position current_moving_turtle_pos { init_moving_turtle_pos };
 
 using namespace std::chrono_literals;
 using namespace std::placeholders;
@@ -26,7 +22,6 @@ class SpawnTwoTurtles: public rclcpp::Node {
 public:
     SOFTWARE_TRAINING_PUBLIC
     explicit SpawnTwoTurtles(const rclcpp::NodeOptions &options): Node("spawn_turtle_node", options) {
-        // TODO: make sure it is /spawn and not /Spawn
         spawn_client = create_client<turtlesim::srv::Spawn>("/spawn");
         // add_turtle_client = create_client<turtlesim::srv::Kill>("/add_turtle_name");
         // define the starting positions order { x, y, theta }
@@ -38,6 +33,10 @@ private:
     rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr two_turtle_server;
     // rclcpp::Client<turtlesim::srv::Kill>::SharedPtr add_turtle_client;
     bool did_spawn = false;
+
+    // define positions here
+    Position init_moving_turtle_pos = { 25, 10, 0 };
+    Position stationary_turtle_pos = { 5, 5, 0 };
 
     SOFTWARE_TRAINING_LOCAL
 
