@@ -35,6 +35,7 @@ set (msg_files
 
 rosidl_generate_interfaces(${PROJECT_NAME}
 	${msg_files}
+	DEPENDENCIES std_msgs geometry_msgs builtin_interfaces
 )
 
 ament_export_dependencies(rosidl_default_runtime)
@@ -111,12 +112,28 @@ rclcpp_components_register_nodes(reset_moving "composition::MotionReset")
 # this way we can execute the component with - ros2 component standalone software_training_assignment composition::SpawnTwoTurtles
 set(node_plugins "${node_plugins}compositon::MotionReset;$<TARGET_FILE:reset_moving>\n")
 
+
+add_library(distance_tracker SHARED 
+	src/distance.cpp)
+target_compile_definitions(distance_tracker
+	PRIVATE "SOFTWARE_TRAINING_DLL")
+ament_target_dependencies(distance_tracker
+	"rclcpp"
+	"rclcpp_components"
+	"turtlesim")
+# build ROS custom messages
+rosidl_target_interfaces(distance_tracker ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rclcpp_components_register_nodes(distance_tracker "composition::DistanceInfo")
+set(node_plugins "${node_plugins}compositon::DistanceInfo;$<TARGET_FILE:distance_tracker>\n")
+
+
 #tell where to put binaries
 install(TARGETS
 	clear_request
 	spawn_turtles
 	move_circular
 	reset_moving
+	distance_tracker
 	ARCHIVE DESTINATION lib
 	LIBRARY DESTINATION lib 
 	RUNTIME DESTINATION bin)

@@ -1,10 +1,7 @@
 #ifndef DISTANCE_H
 #define DISTANCE_H
 
-#include <cstdlib>
 #include <memory>
-#include <string>
-#include <vector>
 #include <functional>
 
 #include <rclcpp/rclcpp.hpp>
@@ -12,7 +9,12 @@
 #include <software_training_assignment/visibility.h>
 #include <turtlesim/msg/pose.hpp>
 #include <software_training_assignment/msg/distances.hpp>
-#include <software_training_assignment/common.hpp>
+// #include <software_training_assignment/common.hpp>
+struct Position {
+    float x;
+    float y;
+    float theta;
+};
 
 // using namespace std::chrono_literals;
 // using namespace std::placeholders;
@@ -20,11 +22,10 @@
 
 namespace composition {
     class DistanceInfo: public rclcpp::Node {
-    
-    public: 
         using pose_msg = turtlesim::msg::Pose;
         using distance_msg = software_training_assignment::msg::Distances;
-
+    
+    public: 
         SOFTWARE_TRAINING_PUBLIC
         explicit DistanceInfo(const rclcpp::NodeOptions &options);
 

@@ -1,6 +1,5 @@
 
 #include <software_training_assignment/distance.hpp>
-#include <software_training_assignment/common.hpp>
 #include <cmath>
 
 // using pose_msg = turtlesim::msg::Pose;
