@@ -62,7 +62,7 @@ ament_target_dependencies(clear_request
 # rclcpp_components_register_nodes(clear_request PLUGIN "composition::clear_turtles" EXECUTABLE request_clear)
 rclcpp_components_register_nodes(clear_request "composition::clear_turtles")
 # this way we can execute the component with - ros2 component standalone software_training_assignment composition::clear_turtles
-set(node_plugins "${node_plugins}compositon::clear_turtles;$<TARGET_FILE:clear_request>\n")
+set(node_plugins "${node_plugins}composition::clear_turtles;$<TARGET_FILE:clear_request>\n")
 
 add_library(spawn_turtles SHARED 
 	src/spawn_turtles.cpp)
@@ -77,7 +77,7 @@ ament_target_dependencies(spawn_turtles
 # rclcpp_components_register_nodes(clear_request PLUGIN "composition::clear_turtles" EXECUTABLE request_clear)
 rclcpp_components_register_nodes(spawn_turtles "composition::SpawnTwoTurtles")
 # this way we can execute the component with - ros2 component standalone software_training_assignment composition::SpawnTwoTurtles
-set(node_plugins "${node_plugins}compositon::SpawnTwoTurtles;$<TARGET_FILE:spawn_turtles>\n")
+set(node_plugins "${node_plugins}composition::SpawnTwoTurtles;$<TARGET_FILE:spawn_turtles>\n")
 
 
 add_library(move_circular SHARED 
@@ -95,7 +95,7 @@ ament_target_dependencies(move_circular
 # rclcpp_components_register_nodes(clear_request PLUGIN "composition::clear_turtles" EXECUTABLE request_clear)
 rclcpp_components_register_nodes(move_circular "composition::CircularMotion")
 # this way we can execute the component with - ros2 component standalone software_training_assignment composition::SpawnTwoTurtles
-set(node_plugins "${node_plugins}compositon::CircularMotion;$<TARGET_FILE:move_circular>\n")
+set(node_plugins "${node_plugins}composition::CircularMotion;$<TARGET_FILE:move_circular>\n")
 
 add_library(reset_moving SHARED 
 	src/reset_moving_turtle.cpp)
@@ -110,7 +110,7 @@ ament_target_dependencies(reset_moving
 # rclcpp_components_register_nodes(clear_request PLUGIN "composition::clear_turtles" EXECUTABLE request_clear)
 rclcpp_components_register_nodes(reset_moving "composition::MotionReset")
 # this way we can execute the component with - ros2 component standalone software_training_assignment composition::SpawnTwoTurtles
-set(node_plugins "${node_plugins}compositon::MotionReset;$<TARGET_FILE:reset_moving>\n")
+set(node_plugins "${node_plugins}composition::MotionReset;$<TARGET_FILE:reset_moving>\n")
 
 
 add_library(distance_tracker SHARED 
@@ -124,7 +124,7 @@ ament_target_dependencies(distance_tracker
 # build ROS custom messages
 rosidl_target_interfaces(distance_tracker ${PROJECT_NAME} "rosidl_typesupport_cpp")
 rclcpp_components_register_nodes(distance_tracker "composition::DistanceInfo")
-set(node_plugins "${node_plugins}compositon::DistanceInfo;$<TARGET_FILE:distance_tracker>\n")
+set(node_plugins "${node_plugins}composition::DistanceInfo;$<TARGET_FILE:distance_tracker>\n")
 
 
 #tell where to put binaries
