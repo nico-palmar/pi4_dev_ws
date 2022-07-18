@@ -35,34 +35,34 @@ private:
     bool did_spawn = false;
 
     // define positions here
-    Position init_moving_turtle_pos = { 25, 10, 0 };
+    Position init_moving_turtle_pos = { 9, 8, 0 };
     Position stationary_turtle_pos = { 5, 5, 0 };
 
     SOFTWARE_TRAINING_LOCAL
 
     void two_turtle_spawn(const std::shared_ptr<std_srvs::srv::Trigger::Request> /*request*/, std::shared_ptr<std_srvs::srv::Trigger::Response> response) {
-        if (!did_spawn) {
-            auto stationary_spawn_req = std::make_shared<turtlesim::srv::Spawn::Request>();
-            stationary_spawn_req->name = "stationary_turtle";
-            
-            stationary_spawn_req->x = stationary_turtle_pos.x;
-            stationary_spawn_req->y = stationary_turtle_pos.y;
-            stationary_spawn_req->theta = stationary_turtle_pos.theta;
-            auto stationary_spawn_res = spawn_client->async_send_request(stationary_spawn_req);
+        // if (!did_spawn) {
+        auto stationary_spawn_req = std::make_shared<turtlesim::srv::Spawn::Request>();
+        stationary_spawn_req->name = "stationary_turtle";
+        
+        stationary_spawn_req->x = stationary_turtle_pos.x;
+        stationary_spawn_req->y = stationary_turtle_pos.y;
+        stationary_spawn_req->theta = stationary_turtle_pos.theta;
+        auto stationary_spawn_res = spawn_client->async_send_request(stationary_spawn_req);
 
-            auto moving_spawn_req = std::make_shared<turtlesim::srv::Spawn::Request>();
-            moving_spawn_req->name = "moving_turtle";
-            
-            moving_spawn_req->x = init_moving_turtle_pos.x;
-            moving_spawn_req->y = init_moving_turtle_pos.y;
-            moving_spawn_req->theta = init_moving_turtle_pos.theta;
-            auto moving_spawn_res = spawn_client->async_send_request(moving_spawn_req);
+        auto moving_spawn_req = std::make_shared<turtlesim::srv::Spawn::Request>();
+        moving_spawn_req->name = "moving_turtle";
+        
+        moving_spawn_req->x = init_moving_turtle_pos.x;
+        moving_spawn_req->y = init_moving_turtle_pos.y;
+        moving_spawn_req->theta = init_moving_turtle_pos.theta;
+        auto moving_spawn_res = spawn_client->async_send_request(moving_spawn_req);
 
-            did_spawn = true;
-            response->success = true;
-        } else {
-            RCLCPP_WARN(this->get_logger(), "Turtle spawn service already called");
-        }
+        did_spawn = true;
+        response->success = true;
+        // } else {
+        //     RCLCPP_WARN(this->get_logger(), "Turtle spawn service already called");
+        // }
         
     }
 

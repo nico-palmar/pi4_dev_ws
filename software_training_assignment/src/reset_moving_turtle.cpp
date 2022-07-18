@@ -30,7 +30,7 @@ namespace composition {
     private:
         rclcpp::Service<trigger_srv>::SharedPtr reset_moving_server;
         rclcpp::Client<teleport_srv>::SharedPtr teleport_abs_client;
-        Position init_moving_turtle_pos = { 25, 10, 0 }; // starting position for the moving turtle
+        Position init_moving_turtle_pos = { 9, 8, 0 }; // starting position for the moving turtle
 
 
         SOFTWARE_TRAINING_LOCAL

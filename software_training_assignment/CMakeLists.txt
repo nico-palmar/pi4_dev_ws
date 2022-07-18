@@ -33,8 +33,13 @@ set (msg_files
 	"msg/Distances.msg"
 )
 
+set(action_files
+	"action/Move.action"
+)
+
 rosidl_generate_interfaces(${PROJECT_NAME}
 	${msg_files}
+	${action_files}
 	DEPENDENCIES std_msgs geometry_msgs builtin_interfaces
 )
 

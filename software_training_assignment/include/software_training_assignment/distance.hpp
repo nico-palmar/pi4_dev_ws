@@ -9,7 +9,7 @@
 #include <software_training_assignment/visibility.h>
 #include <turtlesim/msg/pose.hpp>
 #include <software_training_assignment/msg/distances.hpp>
-// #include <software_training_assignment/common.hpp>
+#include <software_training_assignment/common.hpp>
 
 // using namespace std::chrono_literals;
 // using namespace std::placeholders;
@@ -33,11 +33,11 @@ namespace composition {
         // create threads to run callbacks
         rclcpp::CallbackGroup::SharedPtr callbacks;
         
-        struct Position {
-            float x;
-            float y;
-            float theta;
-        };
+        // struct Position {
+        //     float x;
+        //     float y;
+        //     float theta;
+        // };
         
         Position moving_turtle_pos;
         Position static_turtle_pos;
