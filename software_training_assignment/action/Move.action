@@ -3,7 +3,7 @@ float32 x_pos
 float32 y_pos
 ---
 # res
-uint64_t time_taken
+uint64 time_taken
 ---
 # feedback
 float32 dist_to_goal

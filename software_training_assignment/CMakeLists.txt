@@ -131,6 +131,21 @@ rosidl_target_interfaces(distance_tracker ${PROJECT_NAME} "rosidl_typesupport_cp
 rclcpp_components_register_nodes(distance_tracker "composition::DistanceInfo")
 set(node_plugins "${node_plugins}composition::DistanceInfo;$<TARGET_FILE:distance_tracker>\n")
 
+add_library(move_action_server SHARED 
+	src/move_action.cpp)
+target_compile_definitions(move_action_server
+	PRIVATE "SOFTWARE_TRAINING_DLL")
+ament_target_dependencies(move_action_server
+	"rclcpp"
+	"rclcpp_components"
+	"turtlesim"
+	"rclcpp_action"
+	"geometry_msgs")
+# build ROS custom messages
+rosidl_target_interfaces(move_action_server ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rclcpp_components_register_nodes(move_action_server "composition::MoveAction")
+set(node_plugins "${node_plugins}composition::MoveAction;$<TARGET_FILE:move_action_server>\n")
+
 
 #tell where to put binaries
 install(TARGETS
@@ -139,6 +154,7 @@ install(TARGETS
 	move_circular
 	reset_moving
 	distance_tracker
+	move_action_server
 	ARCHIVE DESTINATION lib
 	LIBRARY DESTINATION lib 
 	RUNTIME DESTINATION bin)

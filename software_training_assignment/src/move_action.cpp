@@ -3,14 +3,11 @@
 #include <thread>
 #include <cmath>
 
-using namespace std::chrono_literals;
-using namespace std::placeholders;
-
 namespace composition {
 
-MoveAction::MoveAction(const rclcpp::NodeOptions &options) 
+MoveAction::MoveAction(const rclcpp::NodeOptions &options): Node("action_server_node", options)
 {
-    using namespace std::placeholdes;
+    using namespace std::placeholders;
     move_server = rclcpp_action::create_server<motion_action>(
         this,
         "waypoint move",
@@ -36,13 +33,14 @@ float MoveAction::euc_dist() {
 
 
 rclcpp_action::GoalResponse MoveAction::handle_goal(
-    const rclcpp_actin::GoalUUID &uuid,
+    const rclcpp_action::GoalUUID &uuid,
     std::shared_ptr<const motion_action::Goal> goal) 
 {
     // accept all goals - could also do error checking 
     RCLCPP_INFO(this->get_logger(), "Recevied goal request with waypoint x: %f and y: %f", goal->x_pos, goal->y_pos);
     goal_pos.x = goal->x_pos;
     goal_pos.y = goal->y_pos;
+    (void)uuid;
 
     return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
 
@@ -51,6 +49,7 @@ rclcpp_action::GoalResponse MoveAction::handle_goal(
 rclcpp_action::CancelResponse MoveAction::handle_cancel(const std::shared_ptr<goal_handle_ns> goal_handle) 
 {
     RCLCPP_INFO(this->get_logger(), "Request to cancel goal");
+    (void)goal_handle;
     return rclcpp_action::CancelResponse::ACCEPT;
 }
     
@@ -67,11 +66,11 @@ void MoveAction::execute(const std::shared_ptr<goal_handle_ns> goal_handle)
     RCLCPP_INFO(this->get_logger(), "Executing goal to x: %f and y: %f", goal_pos.x, goal_pos.y);
     // set frequency for goal execution (turtle to move)
     rclcpp::Rate action_rate(1);
-    auto feedback_ptr = std::make_shared<move_action::Feedback>();
+    auto feedback_ptr = std::make_shared<motion_action::Feedback>();
     // make a reference to the distance to easily change the distance for the feedback ptr
     auto & feedback_dist = feedback_ptr->dist_to_goal;
     // setup the result (time taken)
-    auto res_ptr = std::make_shared<move_action::Result>();
+    auto res_ptr = std::make_shared<motion_action::Result>();
     auto &res_time = res_ptr->time_taken;
 
     // loop here
@@ -81,15 +80,29 @@ void MoveAction::execute(const std::shared_ptr<goal_handle_ns> goal_handle)
             rclcpp::Time curr_time = this->now();
             rclcpp::Duration partial_time_taken = curr_time - start_time;
             // convert time to uint64
-            long int partial_time_taken = partial_time_taken.nanoseconds();
-            res_time = partial_time_taken;
+            long int partial_duration_ns = partial_time_taken.nanoseconds();
+            res_time = partial_duration_ns;
             // set final result
             goal_handle->canceled(res_ptr);
             RCLCPP_INFO(this->get_logger(), "Action cancelled");
             return;
         }
-        // move the turtle in the correct direction
-        
+        // move the turtle in the correct direction (calculate the movement 'slope')
+        // note: this works assuming theta=0 so we are in normal XY reference frame
+        float x_scaled = (goal_pos.x - curr_pos.x)*MOVE_SCALE;
+        float y_scaled = (goal_pos.y - curr_pos.y)*MOVE_SCALE;
+        auto move_msg = twist_msg();
+        move_msg.linear.x = x_scaled;
+        move_msg.linear.y = y_scaled;
+        move_msg.linear.z = 0;
+        move_msg.angular.x = 0;
+        move_msg.angular.y = 0;
+        move_msg.angular.z = 0;
+        do_move_pub->publish(move_msg);
+
+        // update the distance feedback
+        feedback_dist = euc_dist();
+        goal_handle->publish_feedback(feedback_ptr);
         // stall the main action loop before continuing
         action_rate.sleep();
     }
@@ -99,8 +112,8 @@ void MoveAction::execute(const std::shared_ptr<goal_handle_ns> goal_handle)
         rclcpp::Time end = this->now();
         rclcpp::Duration time_taken = end - start_time;
         // convert time to uint64
-        long int time_taken = time_taken.nanoseconds();
-        res_time = time_taken;
+        long int duration_ns = time_taken.nanoseconds();
+        res_time = duration_ns;
 
         // set final result
         goal_handle->succeed(res_ptr);

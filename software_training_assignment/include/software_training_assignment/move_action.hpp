@@ -33,13 +33,15 @@ private:
 
     Position curr_pos;
     Position goal_pos;
-    // constant value to play around with
-    const float SMALL_DIST = 0.0001;
+    // constant values to play around with
+    const float SMALL_DIST = 0.25;
+    const float MOVE_SCALE = 0.1;
 
     void get_pos(const pose_msg::SharedPtr msg);
+    float euc_dist();
 
     rclcpp_action::GoalResponse handle_goal(
-        const rclcpp_actin::GoalUUID &uuid,
+        const rclcpp_action::GoalUUID &uuid,
         std::shared_ptr<const motion_action::Goal> goal);
     
     rclcpp_action::CancelResponse handle_cancel(const std::shared_ptr<goal_handle_ns> goal_handle);
@@ -47,8 +49,6 @@ private:
     void handle_accepted(const std::shared_ptr<goal_handle_ns> goal_handle);
     
     void execute(const std::shared_ptr<goal_handle_ns> goal_handle);
-
-    float euc_dist();
 
 };
 }
