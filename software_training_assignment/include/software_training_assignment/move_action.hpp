@@ -7,6 +7,9 @@
 #include <rclcpp/rclcpp.hpp>
 #include "rclcpp_action/rclcpp_action.hpp"
 
+#include <turtlesim/msg/pose.hpp>
+#include <geometry_msgs/msg/twist.hpp>
+
 #include <software_training_assignment/visibility.h>
 #include <software_training_assignment/common.hpp>
 #include "software_training_assignment/action/move.hpp"
@@ -18,11 +21,22 @@ public:
     using motion_action = software_training_assignment::action::Move;
     using motion_server = rclcpp_action::Server<motion_action>;
     using goal_handle_ns = rclcpp_action::ServerGoalHandle<motion_action>;
+    using pose_msg = turtlesim::msg::Pose;
+    using twist_msg = geometry_msgs::msg::Twist;
     SOFTWARE_TRAINING_PUBLIC
     explicit MoveAction(const rclcpp::NodeOptions &options);
 
 private:
     motion_server::SharedPtr move_server;
+    rclcpp::Publisher<twist_msg>::SharedPtr do_move_pub;
+    rclcpp::Subscription<pose_msg>::SharedPtr pos_sub;
+
+    Position curr_pos;
+    Position goal_pos;
+    // constant value to play around with
+    const float SMALL_DIST = 0.0001;
+
+    void get_pos(const pose_msg::SharedPtr msg);
 
     rclcpp_action::GoalResponse handle_goal(
         const rclcpp_actin::GoalUUID &uuid,
@@ -33,6 +47,8 @@ private:
     void handle_accepted(const std::shared_ptr<goal_handle_ns> goal_handle);
     
     void execute(const std::shared_ptr<goal_handle_ns> goal_handle);
+
+    float euc_dist();
 
 };
 }
