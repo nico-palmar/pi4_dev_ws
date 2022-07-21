@@ -10,7 +10,7 @@ MoveAction::MoveAction(const rclcpp::NodeOptions &options): Node("action_server_
     using namespace std::placeholders;
     move_server = rclcpp_action::create_server<motion_action>(
         this,
-        "waypoint move",
+        "waypoint_move",
         std::bind(&MoveAction::handle_goal, this, _1, _2),
         std::bind(&MoveAction::handle_cancel, this, _1),
         std::bind(&MoveAction::handle_accepted, this, _1));
@@ -81,7 +81,7 @@ void MoveAction::execute(const std::shared_ptr<goal_handle_ns> goal_handle)
             rclcpp::Duration partial_time_taken = curr_time - start_time;
             // convert time to uint64
             long int partial_duration_ns = partial_time_taken.nanoseconds();
-            res_time = partial_duration_ns;
+            res_time = partial_duration_ns * std::pow(10, -9);
             // set final result
             goal_handle->canceled(res_ptr);
             RCLCPP_INFO(this->get_logger(), "Action cancelled");
@@ -113,7 +113,7 @@ void MoveAction::execute(const std::shared_ptr<goal_handle_ns> goal_handle)
         rclcpp::Duration time_taken = end - start_time;
         // convert time to uint64
         long int duration_ns = time_taken.nanoseconds();
-        res_time = duration_ns;
+        res_time = duration_ns * std::pow(10, -9);
 
         // set final result
         goal_handle->succeed(res_ptr);

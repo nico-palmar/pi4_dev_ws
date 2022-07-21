@@ -34,8 +34,8 @@ private:
     Position curr_pos;
     Position goal_pos;
     // constant values to play around with
-    const float SMALL_DIST = 0.25;
-    const float MOVE_SCALE = 0.1;
+    const float SMALL_DIST = 0.1;
+    const float MOVE_SCALE = 0.5;
 
     void get_pos(const pose_msg::SharedPtr msg);
     float euc_dist();
