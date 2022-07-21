@@ -15,8 +15,8 @@ MoveAction::MoveAction(const rclcpp::NodeOptions &options): Node("action_server_
         std::bind(&MoveAction::handle_cancel, this, _1),
         std::bind(&MoveAction::handle_accepted, this, _1));
     
-    do_move_pub = create_publisher<twist_msg>("moving_turtle/cmd_vel", 10);
-    pos_sub = create_subscription<pose_msg>("moving_turtle/pose", 10, std::bind(&MoveAction::get_pos, this, _1));
+    do_move_pub = create_publisher<twist_msg>("/moving_turtle/cmd_vel", 10);
+    pos_sub = create_subscription<pose_msg>("/moving_turtle/pose", 10, std::bind(&MoveAction::get_pos, this, _1));
 }
 
 void MoveAction::get_pos(const pose_msg::SharedPtr msg) {

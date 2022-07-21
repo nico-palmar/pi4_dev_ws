@@ -25,7 +25,7 @@ namespace composition {
         SOFTWARE_TRAINING_PUBLIC
         explicit MotionReset(const rclcpp::NodeOptions &options): rclcpp::Node("reset_moving_turle_node", options) {
             reset_moving_server = create_service<trigger_srv>("moving_turtle_reset", std::bind(&MotionReset::pos_reset, this, _1, _2));
-            teleport_abs_client = create_client<teleport_srv>("/moving_turle/teleport_absolute");
+            teleport_abs_client = create_client<teleport_srv>("/moving_turtle/teleport_absolute");
         }
     private:
         rclcpp::Service<trigger_srv>::SharedPtr reset_moving_server;

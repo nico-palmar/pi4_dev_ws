@@ -48,7 +48,7 @@ void DistanceInfo::get_moving_position(const pose_msg::SharedPtr msg) {
     moving_turtle_pos.x = msg->x;
     moving_turtle_pos.y = msg->y;
     moving_turtle_pos.theta = msg->theta;
-    RCLCPP_INFO(this->get_logger(), "Read moving pos: x %f | y %f | theta %f", moving_turtle_pos.x, moving_turtle_pos.y, moving_turtle_pos.theta);
+    // RCLCPP_INFO(this->get_logger(), "Read moving pos: x %f | y %f | theta %f", moving_turtle_pos.x, moving_turtle_pos.y, moving_turtle_pos.theta);
     read_moving = true;
 }
 
@@ -57,7 +57,7 @@ void DistanceInfo::get_static_position(const pose_msg::SharedPtr msg) {
     static_turtle_pos.x = msg->x;
     static_turtle_pos.y = msg->y;
     static_turtle_pos.theta = msg->theta;
-    RCLCPP_INFO(this->get_logger(), "Read static pos: x %f | y %f | theta %f", static_turtle_pos.x, static_turtle_pos.y, static_turtle_pos.theta);
+    // RCLCPP_INFO(this->get_logger(), "Read static pos: x %f | y %f | theta %f", static_turtle_pos.x, static_turtle_pos.y, static_turtle_pos.theta);
     read_static = true;
 }
 

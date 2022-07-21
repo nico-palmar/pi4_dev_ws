@@ -41,7 +41,7 @@ private:
     SOFTWARE_TRAINING_LOCAL
 
     void two_turtle_spawn(const std::shared_ptr<std_srvs::srv::Trigger::Request> /*request*/, std::shared_ptr<std_srvs::srv::Trigger::Response> response) {
-        // if (!did_spawn) {
+        // if (!did_spawn) {        
         auto stationary_spawn_req = std::make_shared<turtlesim::srv::Spawn::Request>();
         stationary_spawn_req->name = "stationary_turtle";
         
